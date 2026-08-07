@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>制服の残る場所</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stage">
+  <div id="bg0" class="bglayer"></div>
+  <div id="bg1" class="bglayer"></div>
+  <div id="chars"></div>
+  <div id="flash"></div>
+  <div id="chapter"><span></span></div>
+
+  <div id="msgwrap">
+    <div id="msgwin">
+      <div id="namebox"></div>
+      <div id="text"></div>
+      <div id="ctrl">
+        <button class="btn" data-a="auto">AUTO</button>
+        <button class="btn" data-a="skip">SKIP</button>
+        <button class="btn" data-a="log">LOG</button>
+        <button class="btn" data-a="save">SAVE</button>
+        <button class="btn" data-a="load">LOAD</button>
+        <button class="btn" data-a="cfg">CONFIG</button>
+        <button class="btn" data-a="title">TITLE</button>
+      </div>
+      <div id="next"></div>
+    </div>
+  </div>
+
+  <div id="choices"></div>
+  <div id="uihint">右クリック / H キーで元に戻ります</div>
+
+  <!-- modals -->
+  <div class="modal" id="m-log">
+    <div class="mhead"><div class="mtitle">BACKLOG</div><button class="btn" data-close>閉じる</button></div>
+    <div class="mbody" id="logbody"></div>
+  </div>
+  <div class="modal" id="m-save">
+    <div class="mhead"><div class="mtitle" id="savetitle">SAVE</div><button class="btn" data-close>閉じる</button></div>
+    <div class="mbody"><div class="slots" id="slots"></div></div>
+  </div>
+  <div class="modal" id="m-cfg">
+    <div class="mhead"><div class="mtitle">CONFIG</div><button class="btn" data-close>閉じる</button></div>
+    <div class="mbody" id="cfgbody"></div>
+  </div>
+  <div class="modal" id="m-end">
+    <div class="mhead"><div class="mtitle">ENDING LIST</div><button class="btn" data-close>閉じる</button></div>
+    <div class="mbody"><div id="comp"></div><div class="endgrid" id="endgrid"></div></div>
+  </div>
+
+  <div id="endroll"><h2></h2><p></p><button class="tbtn" id="endback">タイトルへ戻る</button></div>
+
+  <div id="title">
+    <div id="titlebg"></div>
+    <img id="titlechr" alt="">
+    <div class="tinner">
+      <h1 id="gtitle">制服の残る場所</h1>
+      <div id="gsub">THE LAST YEAR OF THE OLD BUILDING</div>
+      <div class="tmenu">
+        <button class="tbtn" id="t-new">はじめから</button>
+        <button class="tbtn" id="t-cont">つづきから</button>
+        <button class="tbtn" id="t-end">エンディング</button>
+        <button class="tbtn" id="t-cfg">設定</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="nameask">
+    <div class="nbox">
+      <p>主人公の名前を入力してください</p>
+      <input id="nameinput" maxlength="8" value="湊">
+      <div style="margin-top:28px"><button class="tbtn" id="namego">この名前ではじめる</button></div>
+    </div>
+  </div>
+
+  <!--
+    起動ゲート。ブラウザは「ユーザーが一度も触っていないページ」に音を出させない。
+    そこで最初の一操作をここで受け取り、その勢いでBGMを鳴らしてタイトルへ送る。
+    自動再生が通る環境（許可設定済み・過去に何度も再生した等）では
+    そもそも表示されない。js/boot.js が実際に音が出ているかを測って決める。
+  -->
+  <div id="gate">
+    <div class="ginner">
+      <div id="gmsg">画面をクリック / タップしてはじめる</div>
+      <div id="gsub2">ブラウザの制限により、最初の操作まで音を鳴らせません</div>
+    </div>
+  </div>
+</div>
+
+<!--
+  読み込み順に意味がある。
+    config  … 素材の表（背景・立ち絵・BGM・エンディング）
+    store   … 設定と既読の保存
+    audio   … BGM/SE
+    scenario/dsl  … 命令ヘルパーと S（シナリオの器）
+    scenario/*    … 本文。章ごとに1ファイル
+    engine  … 進行・描画・セーブ
+    boot    … 起動
+  ES module ではなく古典 script なのは、file:// で直接開けるようにするため
+  （module は file:// では CORS で読み込めない）。
+  ファイル名を _ で始めないこと。GitHub Pages の Jekyll が _ で始まるファイルを
+  publish から外すので、404 になってゲームごと起動しなくなる（.nojekyll も置いてある）。
+-->
+<script src="js/config.js"></script>
+<script src="js/store.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/scenario/dsl.js"></script>
+<script src="js/scenario/00_intro.js"></script>
+<script src="js/scenario/01_spring.js"></script>
+<script src="js/scenario/02_summer.js"></script>
+<script src="js/scenario/03_autumn.js"></script>
+<script src="js/scenario/04_winter.js"></script>
+<script src="js/scenario/05_endings.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/boot.js"></script>
+</body>
+</html>
